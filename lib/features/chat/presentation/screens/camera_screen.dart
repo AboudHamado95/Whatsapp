@@ -160,14 +160,31 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
+  void showInSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   void takePhoto(BuildContext context) async {
-    XFile file = await _cameraController!.takePicture();
-    if (!mounted) return;
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (builder) => CameraViewPage(
-                  path: file.path,
-                )));
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      showInSnackBar('Error: select a camera first.');
+      return null;
+    }
+    if (_cameraController!.value.isTakingPicture) {
+      // A capture is already pending, do nothing.
+      return null;
+    }
+    try {
+      XFile file = await _cameraController!.takePicture();
+      if (!mounted) return;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (builder) => CameraViewPage(
+                    path: file.path,
+                  )));
+    } catch (e) {
+       showInSnackBar('Error: select a camera first.');
+    }
   }
 }
