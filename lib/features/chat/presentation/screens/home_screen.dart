@@ -1,20 +1,21 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:whatsapp/features/chat/data/models/chat_model.dart';
+import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/presentation/screens/camera_screen.dart';
+import 'package:whatsapp/features/chat/presentation/screens/chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.chatmodels, this.sourchat})
+  const HomeScreen({Key? key, this.chatEntities, this.sourceChat})
       : super(key: key);
-  final List? chatmodels;
-  final ChatModel? sourchat;
+  final List<ChatEntity>? chatEntities;
+  final ChatEntity? sourceChat;
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
+class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController? _controller;
   @override
@@ -75,16 +76,12 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: TabBarView(
         controller: _controller,
-        children: const [
-          CameraScreen(),
-          // ChatPage(
-          //   chatmodels: widget.chatmodels,
-          //   sourchat: widget.sourchat,
-          // ),
-          //Text("Camera"),
-          Text("Chats"),
-          Text("STATUS"),
-          Text("Calls"),
+        children: [
+          const CameraScreen(),
+          ChatScreen(
+              chatEntities: widget.chatEntities!, sourceChat: widget.sourceChat!),
+          const Text("STATUS"),
+          const Text("Calls"),
         ],
       ),
     );

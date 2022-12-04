@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
 
-class VideoViewPage extends StatefulWidget {
-  const VideoViewPage({Key? key, this.path}) : super(key: key);
+class VideoViewScreen extends StatefulWidget {
+  const VideoViewScreen({Key? key, this.path}) : super(key: key);
   final String? path;
 
   @override
-  _VideoViewPageState createState() => _VideoViewPageState();
+  VideoViewScreenState createState() => VideoViewScreenState();
 }
 
-class _VideoViewPageState extends State<VideoViewPage> {
+class VideoViewScreenState extends State<VideoViewScreen> {
   VideoPlayerController? _controller;
 
   @override

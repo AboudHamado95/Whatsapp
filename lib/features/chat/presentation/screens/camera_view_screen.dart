@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:whatsapp/core/utils/dimensions.dart';
 
-class CameraViewPage extends StatelessWidget {
-  const CameraViewPage({Key? key, required this.path}) : super(key: key);
+class CameraViewScreen extends StatelessWidget {
+  const CameraViewScreen({Key? key, required this.path}) : super(key: key);
   final String path;
 
   @override

@@ -12,10 +12,10 @@ class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  CameraScreenState createState() => CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class CameraScreenState extends State<CameraScreen> {
   CameraController? _cameraController;
   Future<void>? cameraValue;
   bool isRecording = false;
@@ -101,7 +101,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (builder) => VideoViewPage(
+                                  builder: (builder) => VideoViewScreen(
                                         path: videoPath.path,
                                       )));
                         },
@@ -167,7 +167,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void takePhoto(BuildContext context) async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
-      showInSnackBar('Error: select a camera first.');
+      showInSnackBar('Error: a camera.');
       return null;
     }
     if (_cameraController!.value.isTakingPicture) {
@@ -180,11 +180,9 @@ class _CameraScreenState extends State<CameraScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (builder) => CameraViewPage(
-                    path: file.path,
-                  )));
+              builder: (builder) => CameraViewScreen(path: file.path)));
     } catch (e) {
-       showInSnackBar('Error: select a camera first.');
+      showInSnackBar('Error: select a camera first.');
     }
   }
 }
