@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chat/presentation/screens/individual_screen.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard(
@@ -14,14 +15,15 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //TODO: Navigate to Individual Screen
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (contex) => IndividualPage(
-        //               chatEntity: chatEntity,
-        //               sourchat: sourchat,
-        //             )));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualScreen(
+              chatEntity: chatEntity,
+              sourceChat: sourceChat,
+            ),
+          ),
+        );
       },
       child: Column(
         children: [
