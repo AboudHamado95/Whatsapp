@@ -21,41 +21,40 @@ class OwnMessageCard extends StatelessWidget {
           color: const Color(0xffdcf8c6),
           margin: EdgeInsets.symmetric(
               horizontal: context.width15, vertical: context.height10 / 2),
-          child: Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.only(
                   left: context.width10 / 2,
                   right: context.width30,
                   top: context.height10 / 2,
-                  bottom: context.height20,
+                  bottom: context.height10,
                 ),
                 child: Text(
                   message,
                   style: TextStyle(fontSize: context.font16),
                 ),
               ),
-              Positioned(
-                bottom: context.height10 / 2 - 1,
-                right: context.width10,
-                child: Row(
-                  children: [
-                    Text(
-                      time,
-                      style: TextStyle(
-                        fontSize: context.font16 - 3,
-                        color: Colors.grey[600],
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    time,
+                    style: TextStyle(
+                      fontSize: context.font16 - 3,
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(
-                      width: context.width10 / 2,
-                    ),
-                    Icon(
-                      Icons.done_all,
-                      size: context.iconsSize20,
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    width: context.width10 / 2,
+                  ),
+                  Icon(
+                    Icons.done_all,
+                    size: context.iconsSize20,
+                  ),
+                ],
               ),
             ],
           ),

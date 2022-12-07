@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/app.dart';
 import 'package:whatsapp/bloc_observer.dart';
 import 'package:whatsapp/core/cache/cache_helper.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'injection_container.dart' as di;
+
 late List<CameraDescription> cameras;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
