@@ -1,8 +1,8 @@
 import 'package:whatsapp/core/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/avatar_card.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/contact_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/avatar_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/contact_card.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({Key? key}) : super(key: key);

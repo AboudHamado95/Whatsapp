@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/presentation/screens/select_contact_screen.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/custom_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/custom_card.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(

@@ -8,8 +8,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/domain/entities/message_entity.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:whatsapp/features/chat/presentation/widgets/own_message_card.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/replay_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/own_message_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/replay_card.dart';
 
 class IndividualScreen extends StatefulWidget {
   const IndividualScreen(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
 import 'package:whatsapp/features/chat/presentation/screens/create_group_screen.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/button_card.dart';
-import 'package:whatsapp/features/chat/presentation/widgets/contact_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/button_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/contact_card.dart';
 
 class SelectContactScreen extends StatefulWidget {
   const SelectContactScreen({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class SelectContactScreenState extends State<SelectContactScreen> {
       ChatEntity(name: "Balram", status: "Flutter Developer..........."),
       ChatEntity(name: "Saket", status: "Web developer..."),
       ChatEntity(name: "Bhanu Dev", status: "App developer...."),
-      ChatEntity(name: "Collins", status: "Raect developer.."),
+      ChatEntity(name: "Collins", status: "React developer.."),
       ChatEntity(name: "Kishor", status: "Full Stack Web"),
       ChatEntity(name: "Testing1", status: "Example work"),
       ChatEntity(name: "Testing2", status: "Sharing is caring"),

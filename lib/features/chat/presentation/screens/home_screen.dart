@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/presentation/screens/camera_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/chat_screen.dart';
+import 'package:whatsapp/features/chat/presentation/screens/status_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, this.chatEntities, this.sourceChat})
@@ -80,7 +81,7 @@ class HomeScreenState extends State<HomeScreen>
           const CameraScreen(),
           ChatScreen(
               chatEntities: widget.chatEntities!, sourceChat: widget.sourceChat!),
-          const Text("STATUS"),
+          const StatusScreen(),
           const Text("Calls"),
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/features/chat/presentation/screens/camera_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/create_group_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/home_screen.dart';
+import 'package:whatsapp/features/chat/presentation/screens/landing_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/login_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/select_contact_screen.dart';
 
@@ -19,7 +20,7 @@ class AppRoute {
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.initialRoute:
-        return materialBuilder(widget: const LoginScreen());
+        return materialBuilder(widget: const LandingScreen());
       case Routes.homeScreen:
         return materialBuilder(widget: const HomeScreen());
       case Routes.loginScreen:
