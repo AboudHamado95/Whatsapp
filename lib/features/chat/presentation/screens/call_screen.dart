@@ -45,13 +45,13 @@ class _CallScreenState extends State<CallScreen> {
         leading: CircleAvatar(
           radius: context.radius15 * 2 - 5,
         ),
-        title: const Text(
+        title: Text(
           name,
-          style: TextStyle(fontWeight: FontWeight.w500),
+          style: const TextStyle(fontWeight: FontWeight.w500),
         ),
         subtitle: Row(children: [
           Icon(
-           iconData
+            iconData,
             color: Colors.green,
             size: context.iconsSize16 * 2 - 2,
           ),
