@@ -37,7 +37,7 @@ class IndividualScreenState extends State<IndividualScreen> {
   List<MessageEntity> messages = [];
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  IO.Socket socket = IO.io("http://192.168.42.130:5000", <String, dynamic>{
+  IO.Socket socket = IO.io("http://192.168.1.2:5000", <String, dynamic>{
     "transports": ["websocket"],
     "autoConnect": false,
   });
@@ -127,7 +127,7 @@ class IndividualScreenState extends State<IndividualScreen> {
     });
 
     var request = http.MultipartRequest(
-        'POST', Uri.parse('http://192.168.42.130:5000/routes/addimage'));
+        'POST', Uri.parse('http://192.168.1.2:5000/routes/addimage'));
     request.files.add(await http.MultipartFile.fromPath('img', path));
     request.headers.addAll({
       "Content-type": "multipart/form-data",
@@ -536,7 +536,9 @@ class IndividualScreenState extends State<IndividualScreen> {
   Widget iconCreation(
       IconData icons, Color color, String text, Function onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        onTap();
+      },
       child: Column(
         children: [
           CircleAvatar(
