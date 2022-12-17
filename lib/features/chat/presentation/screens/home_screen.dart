@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chat/presentation/screens/call_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/camera_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/chat_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/status_screen.dart';
@@ -80,9 +81,10 @@ class HomeScreenState extends State<HomeScreen>
         children: [
           const CameraScreen(),
           ChatScreen(
-              chatEntities: widget.chatEntities!, sourceChat: widget.sourceChat!),
+              chatEntities: widget.chatEntities!,
+              sourceChat: widget.sourceChat!),
           const StatusScreen(),
-          const Text("Calls"),
+          const CallScreen(),
         ],
       ),
     );
