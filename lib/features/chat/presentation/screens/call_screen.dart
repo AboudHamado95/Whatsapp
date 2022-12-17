@@ -46,18 +46,18 @@ class _CallScreenState extends State<CallScreen> {
           radius: context.radius15 * 2 - 5,
         ),
         title: const Text(
-          'Text Name',
+          name,
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
         subtitle: Row(children: [
           Icon(
-            Icons.call_made,
+           iconData
             color: Colors.green,
             size: context.iconsSize16 * 2 - 2,
           ),
           SizedBox(width: context.width15 / 2 - 1),
           Text(
-            'July 18, 18:35',
+            time,
             style: TextStyle(fontSize: context.font26 / 2),
           ),
         ]),
