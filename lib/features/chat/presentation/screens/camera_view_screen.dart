@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
 
 class CameraViewScreen extends StatelessWidget {
-  const CameraViewScreen({Key? key, required this.path}) : super(key: key);
+  const CameraViewScreen({Key? key, required this.path, this.onImageSend})
+      : super(key: key);
   final String path;
+  final Function? onImageSend;
+  static TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,7 @@ class CameraViewScreen extends StatelessWidget {
                     vertical: context.height10 / 2,
                     horizontal: context.width15 / 2),
                 child: TextFormField(
+                  controller: controller,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: context.font16,
@@ -81,13 +85,18 @@ class CameraViewScreen extends StatelessWidget {
                         color: Colors.white,
                         fontSize: context.font26,
                       ),
-                      suffixIcon: CircleAvatar(
-                        radius: context.radius30 - 3,
-                        backgroundColor: Colors.tealAccent[700],
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: context.iconsSize24,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          onImageSend!(path, controller.text.trim());
+                        },
+                        child: CircleAvatar(
+                          radius: context.radius30 - 3,
+                          backgroundColor: Colors.tealAccent[700],
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: context.iconsSize24,
+                          ),
                         ),
                       )),
                 ),

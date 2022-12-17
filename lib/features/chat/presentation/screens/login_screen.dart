@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/domain/entities/country_entity.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/button_card.dart';
 import 'package:whatsapp/features/chat/presentation/screens/country_screen.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
+import 'package:whatsapp/features/chat/presentation/screens/home_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -83,66 +85,67 @@ class LoginScreenState extends State<LoginScreen> {
             )
           ],
         ),
-        body: SizedBox(
-          height: context.screenHeight,
-          width: context.screenWidth,
-          child: Column(children: [
-            Text(
-              'whatsapp will send an sms message to verify your number',
-              style: TextStyle(fontSize: context.font26 / 2),
-            ),
-            SizedBox(height: context.height10 / 2),
-            Text(
-              "what's my number!",
-              style: TextStyle(
-                  fontSize: context.font26 / 2, color: Colors.cyan[800]),
-            ),
-            SizedBox(height: context.height15),
-            countryCard(),
-            SizedBox(height: context.height10 / 2),
-            number(),
-            Expanded(
-              child: Container(),
-            ),
-            InkWell(
-              onTap: () {
-                if (controller.text.length < 10) {
-                  showMyDialog();
-                }
-                showMyDialog();
-              },
-              child: Container(
-                height: context.height20 * 2,
-                width: context.width10 * 7,
-                color: Colors.teal,
-                child: const Center(
-                    child: Text(
-                  'NEXT',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                )),
-              ),
-            ),
-            SizedBox(height: context.height20 * 2),
-          ]),
-        )
-        //    ListView.builder(
-        //       itemCount: chatEntities!.length,
-        //       itemBuilder: (context, index) => InkWell(
-        //             onTap: () {
-        //               sourceChat = chatEntities!.removeAt(index);
-        //               Navigator.pushReplacement(
-        //                   context,
-        //                   MaterialPageRoute(
-        //                       builder: (builder) => HomeScreen(
-        //                             chatEntities: chatEntities!,
-        //                             sourceChat: sourceChat!,
-        //                           )));
-        //             },
-        //             child: ButtonCard(
-        //               name: chatEntities![index].name!,
-        //               icon: Icons.person,
-        //             ),
-        //           )),
+        body:
+        //  SizedBox(
+        //   height: context.screenHeight,
+        //   width: context.screenWidth,
+        //   child: Column(children: [
+        //     Text(
+        //       'whatsapp will send an sms message to verify your number',
+        //       style: TextStyle(fontSize: context.font26 / 2),
+        //     ),
+        //     SizedBox(height: context.height10 / 2),
+        //     Text(
+        //       "what's my number!",
+        //       style: TextStyle(
+        //           fontSize: context.font26 / 2, color: Colors.cyan[800]),
+        //     ),
+        //     SizedBox(height: context.height15),
+        //     countryCard(),
+        //     SizedBox(height: context.height10 / 2),
+        //     number(),
+        //     Expanded(
+        //       child: Container(),
+        //     ),
+        //     InkWell(
+        //       onTap: () {
+        //         if (controller.text.length < 10) {
+        //           showMyDialog();
+        //         }
+        //         showMyDialog();
+        //       },
+        //       child: Container(
+        //         height: context.height20 * 2,
+        //         width: context.width10 * 7,
+        //         color: Colors.teal,
+        //         child: const Center(
+        //             child: Text(
+        //           'NEXT',
+        //           style: TextStyle(fontWeight: FontWeight.w600),
+        //         )),
+        //       ),
+        //     ),
+        //     SizedBox(height: context.height20 * 2),
+        //   ]),
+        // )
+           ListView.builder(
+              itemCount: chatEntities!.length,
+              itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      sourceChat = chatEntities!.removeAt(index);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => HomeScreen(
+                                    chatEntities: chatEntities!,
+                                    sourceChat: sourceChat!,
+                                  )));
+                    },
+                    child: ButtonCard(
+                      name: chatEntities![index].name!,
+                      icon: Icons.person,
+                    ),
+                  )),
         );
   }
 

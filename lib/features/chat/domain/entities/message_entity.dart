@@ -1,6 +1,8 @@
 class MessageEntity {
-  String? type;
+  String type;
   String? message;
-  String? time;
-  MessageEntity({this.message, this.type, this.time});
+  String time;
+  String? path;
+  MessageEntity(
+      {this.message, required this.type, required this.time, this.path});
 }

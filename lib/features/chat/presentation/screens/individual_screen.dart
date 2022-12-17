@@ -1,6 +1,9 @@
 // import 'package:camera/camera.dart';
+import 'dart:convert';
+
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp/core/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,8 +11,13 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:whatsapp/features/chat/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chat/domain/entities/message_entity.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:whatsapp/features/chat/presentation/screens/camera_screen.dart';
+import 'package:whatsapp/features/chat/presentation/screens/camera_view_screen.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/own_file_card.dart';
 import 'package:whatsapp/features/chat/presentation/screens/cards/own_message_card.dart';
-import 'package:whatsapp/features/chat/presentation/screens/cards/replay_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/replay_file_card.dart';
+import 'package:whatsapp/features/chat/presentation/screens/cards/replay_message_card.dart';
+import 'package:http/http.dart' as http;
 
 class IndividualScreen extends StatefulWidget {
   const IndividualScreen(
@@ -29,14 +37,18 @@ class IndividualScreenState extends State<IndividualScreen> {
   List<MessageEntity> messages = [];
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  IO.Socket socket = IO.io("http://192.168.1.10:5000", <String, dynamic>{
+  IO.Socket socket = IO.io("http://192.168.42.130:5000", <String, dynamic>{
     "transports": ["websocket"],
     "autoConnect": false,
   });
+  XFile? file;
+  ImagePicker picker = ImagePicker();
+  int popTime = 0;
+
   @override
   void initState() {
     super.initState();
-    // connect();
+    //connect();
 
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -60,7 +72,8 @@ class IndividualScreenState extends State<IndividualScreen> {
         if (kDebugMode) {
           print('the message is $msg');
         }
-        setMessage("destination", msg["message"]);
+        setMessage(
+            type: "destination", message: msg["message"], path: msg["path"]);
         scrollController.animateTo(scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       });
@@ -70,17 +83,28 @@ class IndividualScreenState extends State<IndividualScreen> {
     }
   }
 
-  void sendMessage(String message, int sourceId, int targetId) {
-    setMessage("source", message);
-    socket.emit("message",
-        {"message": message, "sourceId": sourceId, "targetId": targetId});
+  void sendMessage(
+      {required String message,
+      required int sourceId,
+      required int targetId,
+      String? path}) {
+    setMessage(type: "source", message: message, path: path!);
+    socket.emit("message", {
+      "message": message,
+      "sourceId": sourceId,
+      "targetId": targetId,
+      'path': path
+    });
   }
 
-  void setMessage(String type, String message) {
+  void setMessage(
+      {required String type, required String message, String? path}) {
     MessageEntity messageEntity = MessageEntity(
-        type: type,
-        message: message,
-        time: DateTime.now().toString().substring(10, 16));
+      type: type,
+      message: message,
+      time: DateTime.now().toString().substring(10, 16),
+      path: path ?? '',
+    );
     if (kDebugMode) {
       print(messages);
     }
@@ -88,6 +112,40 @@ class IndividualScreenState extends State<IndividualScreen> {
     setState(() {
       messages.add(messageEntity);
     });
+  }
+
+  void onImageSend(String path, String message) async {
+    if (kDebugMode) {
+      print('hey there working $path');
+    }
+    for (var i = 0; i < popTime; i++) {
+      Navigator.pop(context);
+    }
+
+    setState(() {
+      popTime = 0;
+    });
+
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://192.168.42.130:5000/routes/addimage'));
+    request.files.add(await http.MultipartFile.fromPath('img', path));
+    request.headers.addAll({
+      "Content-type": "multipart/form-data",
+      //"Authorization": "Bearer $token"
+    });
+    http.StreamedResponse response = await request.send();
+    var httpResponse = await http.Response.fromStream(response);
+    var data = json.decode(httpResponse.body);
+    setMessage(type: "source", message: message, path: path);
+    socket.emit("message", {
+      "message": message,
+      "sourceId": widget.sourceChat.id,
+      "targetId": widget.chatEntity.id,
+      'path': data['path'],
+    });
+    if (kDebugMode) {
+      print(response.statusCode);
+    }
   }
 
   @override
@@ -223,14 +281,28 @@ class IndividualScreenState extends State<IndividualScreen> {
                         );
                       }
                       if (messages[index].type == "source") {
-                        return OwnMessageCard(
-                          message: messages[index].message!,
-                          time: messages[index].time!,
-                        );
+                        if (messages[index].path != null) {
+                          return OwnFileCard(
+                            path: messages[index].path!,
+                            message: messages[index].message!,
+                            time: messages[index].time,
+                          );
+                        } else {
+                          return OwnMessageCard(
+                            message: messages[index].message!,
+                            time: messages[index].time,
+                          );
+                        }
                       } else {
+                        if (messages[index].path != null) {
+                          return ReplayFileCard(
+                            path: messages[index].path!,
+                            time: messages[index].time,
+                          );
+                        }
                         return ReplyCard(
                           message: messages[index].message!,
-                          time: messages[index].time!,
+                          time: messages[index].time,
                         );
                       }
                     },
@@ -308,15 +380,21 @@ class IndividualScreenState extends State<IndividualScreen> {
                                         },
                                       ),
                                       IconButton(
-                                        icon: const Icon(Icons.camera_alt),
-                                        onPressed: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (builder) =>
-                                          //             CameraApp()));
-                                        },
-                                      ),
+                                          icon: const Icon(Icons.camera_alt),
+                                          onPressed: () {
+                                            setState(() {
+                                              popTime = 2;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    CameraScreen(
+                                                        onImageSend:
+                                                            onImageSend),
+                                              ),
+                                            );
+                                          }),
                                     ],
                                   ),
                                   contentPadding: const EdgeInsets.all(5),
@@ -347,9 +425,10 @@ class IndividualScreenState extends State<IndividualScreen> {
                                             const Duration(milliseconds: 300),
                                         curve: Curves.easeOut);
                                     sendMessage(
-                                        controller.text,
-                                        widget.sourceChat.id!,
-                                        widget.chatEntity.id!);
+                                        message: controller.text,
+                                        sourceId: widget.sourceChat.id!,
+                                        targetId: widget.chatEntity.id!,
+                                        path: '');
                                     controller.clear();
                                     setState(() {
                                       sendButton = false;
@@ -389,16 +468,44 @@ class IndividualScreenState extends State<IndividualScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, "Document"),
+                  iconCreation(Icons.insert_drive_file, Colors.indigo,
+                      "Document", () {}),
                   SizedBox(
                     width: context.width20 * 2,
                   ),
-                  iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera",
+                      () async {
+                    setState(() {
+                      popTime = 3;
+                    });
+                    if (mounted) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return CameraScreen(
+                          onImageSend: onImageSend,
+                        );
+                      }));
+                    }
+                  }),
                   SizedBox(
                     width: context.width20 * 2,
                   ),
-                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
+                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery",
+                      () async {
+                    setState(() {
+                      popTime = 2;
+                    });
+                    file = await picker.pickImage(source: ImageSource.gallery);
+                    if (mounted) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return CameraViewScreen(
+                          path: file!.path,
+                          onImageSend: onImageSend,
+                        );
+                      }));
+                    }
+                  }),
                 ],
               ),
               SizedBox(
@@ -407,15 +514,16 @@ class IndividualScreenState extends State<IndividualScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(Icons.headset, Colors.orange, "Audio"),
+                  iconCreation(Icons.headset, Colors.orange, "Audio", () {}),
                   SizedBox(
                     width: context.width20 * 2,
                   ),
-                  iconCreation(Icons.location_pin, Colors.teal, "Location"),
+                  iconCreation(
+                      Icons.location_pin, Colors.teal, "Location", () {}),
                   SizedBox(
                     width: context.width20 * 2,
                   ),
-                  iconCreation(Icons.person, Colors.blue, "Contact"),
+                  iconCreation(Icons.person, Colors.blue, "Contact", () {}),
                 ],
               ),
             ],
@@ -425,7 +533,8 @@ class IndividualScreenState extends State<IndividualScreen> {
     );
   }
 
-  Widget iconCreation(IconData icons, Color color, String text) {
+  Widget iconCreation(
+      IconData icons, Color color, String text, Function onTap) {
     return InkWell(
       onTap: () {},
       child: Column(

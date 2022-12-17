@@ -1,15 +1,16 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:whatsapp/core/utils/dimensions.dart';
-
 import 'package:flutter/material.dart';
+
+import 'package:whatsapp/core/utils/dimensions.dart';
 import 'package:whatsapp/features/chat/presentation/screens/camera_view_screen.dart';
 import 'package:whatsapp/features/chat/presentation/screens/video_view_screen.dart';
 import 'package:whatsapp/main.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  const CameraScreen({Key? key, this.onImageSend}) : super(key: key);
+  final Function? onImageSend;
 
   @override
   CameraScreenState createState() => CameraScreenState();
@@ -180,7 +181,10 @@ class CameraScreenState extends State<CameraScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (builder) => CameraViewScreen(path: file.path)));
+              builder: (builder) => CameraViewScreen(
+                    path: file.path,
+                    onImageSend: widget.onImageSend,
+                  )));
     } catch (e) {
       showInSnackBar('Error: select a camera first.');
     }
